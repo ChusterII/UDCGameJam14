@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     public float playerMaxHealth = 100f;
     public float playerMaxFire = 100f;
+    public float startingFire = 0f;
     
     [Tooltip("Negative number")]
     public float fireballCost = -10f;
@@ -21,7 +22,7 @@ public class PlayerController : MonoBehaviour
         _uiManager = UIManager.Instance;
         
         // Set initial fire value
-        playerCurrentFire = 0;
+        playerCurrentFire = startingFire;
     }
 
     // Update is called once per frame

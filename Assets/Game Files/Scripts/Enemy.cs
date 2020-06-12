@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
@@ -12,11 +13,19 @@ public class Enemy : MonoBehaviour
     private ObjectPooler _objectPooler;
     private float _bloodPositionY;
     private GameObject _spawnedBlood;
+    private Vector3 _forward, _right; // Different from world axis forward and right because of camera
+    private Camera _camera;
+    private NavMeshAgent _agent;
+    private Quaternion _rotation;
+    private Animator _animator;
+    private Rigidbody _rigidBody;
 
     // Start is called before the first frame update
     void Start()
     {
         InitializeComponents();
+        InitializeForwardVector();
+        InitializeRightVector();
         InitializeBloodSplatter();
     }
 
@@ -24,7 +33,8 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // Keeps the quad from turning
+        transform.rotation = _rotation;
     }
 
     public void OnDeath()
@@ -72,6 +82,22 @@ public class Enemy : MonoBehaviour
     
     private void InitializeComponents()
     {
+        _camera = Camera.main;
         _objectPooler = ObjectPooler.Instance;
+        _animator = GetComponent<Animator>();
+        _rigidBody = GetComponent<Rigidbody>();
+        _rotation = Quaternion.Euler(0,45,0);
+    }
+    
+    private void InitializeRightVector()
+    {
+        _right = Quaternion.Euler(new Vector3(0, 90, 0)) * _forward;
+    }
+
+    private void InitializeForwardVector()
+    {
+        _forward = _camera.transform.forward;
+        _forward.y = 0f;
+        _forward = Vector3.Normalize(_forward);
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4743075573715611477}
   - component: {fileID: 4744111829733990863}
   m_Layer: 0
-  m_Name: Particles
+  m_Name: (Medium Explosion) Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3754,7 +3754,7 @@ ParticleSystem:
     radiusScale: 0.6
     collidesWith:
       serializedVersion: 2
-      m_Bits: 256
+      m_Bits: 512
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5

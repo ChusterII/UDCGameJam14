@@ -122,7 +122,7 @@ public class IsoController : MonoBehaviour
             
                 // Save the point where we're looking
                 _mousePosition = lookAtPoint;
-                
+
                 // Make the fireballController Look (in secret!!)
                 fireballController.transform.LookAt(lookAtPoint);
             }

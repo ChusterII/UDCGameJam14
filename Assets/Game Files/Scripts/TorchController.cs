@@ -25,10 +25,7 @@ public class TorchController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_isMousedOver)
-        {
-            print("mouse over!");
-        }
+        
     }
     
     /// <summary>
