@@ -11,17 +11,17 @@ NavMeshProjectSettings:
     cost: 1
   - name: Jump
     cost: 2
-  - name: 
+  - name: Floor 1
     cost: 1
-  - name: 
+  - name: Floor 2
     cost: 1
-  - name: 
+  - name: Floor 3
     cost: 1
-  - name: 
+  - name: Floor 4
     cost: 1
-  - name: 
+  - name: Floor 5
     cost: 1
-  - name: 
+  - name: Floor 6
     cost: 1
   - name: 
     cost: 1
