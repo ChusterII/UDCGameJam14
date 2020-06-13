@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using MEC;
 using UnityEngine;
 
 public enum CursorType
@@ -32,12 +33,17 @@ public class GameManager : MonoBehaviour
     public bool clickedOnFire;
     
     private float _playerFire;
+    private PlayerController _player;
 
 
     // Start is called before the first frame update
     void Start()
     {
         SetCursor(CursorType.Normal);
+        _player = FindObjectOfType<PlayerController>();
+        
+        // Play the starting sequence!
+        Timing.RunCoroutine(_player.StartingSequence());
     }
 
     // Update is called once per frame
@@ -62,6 +68,12 @@ public class GameManager : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException(nameof(cursorType), cursorType, null);
         }
+    }
+
+    public void PlayerDied()
+    {
+        // Calls the death animation for the player
+        _player.PlayerDeath();
     }
 
     
