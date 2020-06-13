@@ -300,7 +300,6 @@ public class IsoController : MonoBehaviour
                 {
                     if (remainingFire < 0)
                     {
-                        print("entered need");
                         // We display a message
                         SetFloatingTextValue("I need fire...");
                         floatingTextObject.SetActive(true);

@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 1017367704078653429}
   - component: {fileID: 1017367704078653426}
   - component: {fileID: 1017367704078653427}
-  - component: {fileID: 662658006}
   m_Layer: 0
   m_Name: Torch
   m_TagString: Untagged
@@ -96,21 +95,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &662658006
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1017367704078653424}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7db9c4ec6a82bb8408f38bbd0c4e0904, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  highlightSphere: {fileID: 1017367702813505805}
-  fire: {fileID: 5343124721181283197}
-  _isMousedOver: 0
 --- !u!135 &1255916968
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -321,12 +305,6 @@ GameObject:
 --- !u!4 &4376281473898278881 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7973198087022078021, guid: 966b25c4db9407543881170f13dbe9c4,
-    type: 3}
-  m_PrefabInstance: {fileID: 5917116086323644324}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &5343124721181283197 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 1746066405273130201, guid: 966b25c4db9407543881170f13dbe9c4,
     type: 3}
   m_PrefabInstance: {fileID: 5917116086323644324}
   m_PrefabAsset: {fileID: 0}

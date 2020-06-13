@@ -36,7 +36,9 @@ public class ObjectPooler : MonoBehaviour
     public List<Pool> pools;
     public Dictionary<string, Queue<GameObject>> poolDictionary;
 
+    [HideInInspector]
     public float progress;
+    [HideInInspector]
     public bool isDone;
     private int _count;
     private int _totalSpawns;
