@@ -27,12 +27,6 @@ public class FireController : MonoBehaviour
         _objectPooler = ObjectPooler.Instance;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnMouseOver()
     {
         SetHighlightFade(0);

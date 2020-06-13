@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using MEC;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
@@ -18,7 +19,9 @@ public class IsoController : MonoBehaviour
     [Header("Fireball Settings")]
     public float fireballSpeed;
     public GameObject fireballController;
-    
+
+    [Header("Floating Text")]
+    public GameObject floatingTextObject;
     
     // --------------------------- Private variables start here ---------------------------
     private Vector3 _forward, _right; // Different from world axis forward and right because of camera
@@ -26,8 +29,11 @@ public class IsoController : MonoBehaviour
     private NavMeshAgent _agent;
     private Vector3 _velocity;
     private Vector3 _mousePosition;
-    private bool _movementEnabled = true;
-    private bool _mouseLookEnabled = true;
+    [HideInInspector]
+    public bool movementEnabled = true;
+    [HideInInspector]
+    public bool mouseLookEnabled = true;
+    public bool inputDisabled;
     private bool _isTeleporting;
     private bool _moveFireball;
     private bool _continueCoroutine;
@@ -40,6 +46,8 @@ public class IsoController : MonoBehaviour
     private Rigidbody _rigidBody;
     private Quaternion _rotation;
     private GameObject _fireball;
+    private TextMeshPro _floatingText;
+    
 
 
     // Start is called before the first frame update
@@ -75,7 +83,7 @@ public class IsoController : MonoBehaviour
     // --------------------------- User-made methods start here ---------------------------
     private void Move()
     {
-        if (_movementEnabled)
+        if (movementEnabled)
         {
             // Store input values in a temporary Vector2
             _movement.x = Input.GetAxisRaw("Horizontal");
@@ -107,7 +115,7 @@ public class IsoController : MonoBehaviour
     
     private void MouseLook()
     {
-        if (_mouseLookEnabled)
+        if (mouseLookEnabled)
         {
             // Get a ray from the camera to wherever in the map
             Ray mousePos = _camera.ScreenPointToRay(Input.mousePosition);
@@ -122,7 +130,7 @@ public class IsoController : MonoBehaviour
             
                 // Save the point where we're looking
                 _mousePosition = lookAtPoint;
-                
+
                 // Make the fireballController Look (in secret!!)
                 fireballController.transform.LookAt(lookAtPoint);
             }
@@ -205,7 +213,7 @@ public class IsoController : MonoBehaviour
             _currentNavMeshLayer = CheckCurrentNavMeshLayer();
 
             // If we press the mouse button for moving
-            if (Input.GetMouseButtonDown(0) && !_isTeleporting && !_gameManager.clickedOnFire)
+            if (Input.GetMouseButtonDown(0) && !_isTeleporting && !_gameManager.clickedOnFire && !inputDisabled)
             {
                 // Get the Nav Mesh layer of where the player clicked
                 int clickedNavMeshLayer = CheckClickedNavMeshLayer(_mousePosition);
@@ -288,6 +296,20 @@ public class IsoController : MonoBehaviour
                     // Lower the teleporting flag!
                     _isTeleporting = false;
                 }
+                else
+                {
+                    if (remainingFire < 0)
+                    {
+                        print("entered need");
+                        // We display a message
+                        SetFloatingTextValue("I need fire...");
+                        floatingTextObject.SetActive(true);
+
+                        yield return Timing.WaitForSeconds(0.75f);
+                        floatingTextObject.SetActive(false);
+                        
+                    }
+                }
             }
 
             // Wait one frame, otherwise this will crash Unity!
@@ -324,8 +346,13 @@ public class IsoController : MonoBehaviour
 
     private void EnablePlayerMovement(bool value)
     {
-        _movementEnabled = value;
-        _mouseLookEnabled = value;
+        movementEnabled = value;
+        mouseLookEnabled = value;
+    }
+
+    private void SetFloatingTextValue(string value)
+    {
+        _floatingText.text = value;
     }
 
 
@@ -357,6 +384,7 @@ public class IsoController : MonoBehaviour
         _fireball = fireballController.transform.GetChild(0).gameObject;
         _rigidBody = GetComponent<Rigidbody>();
         _rotation = Quaternion.Euler(0,45,0);
+        _floatingText = floatingTextObject.GetComponent<TextMeshPro>();
     }
 
     private void InitializeParticles()
@@ -364,8 +392,6 @@ public class IsoController : MonoBehaviour
         fireballController.transform.position = transform.position;
         _fireball.SetActive(false);
     }
-
-    
 
     #endregion
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using MEC;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -12,7 +13,14 @@ public class ObjectPooler : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     #endregion
@@ -27,16 +35,32 @@ public class ObjectPooler : MonoBehaviour
 
     public List<Pool> pools;
     public Dictionary<string, Queue<GameObject>> poolDictionary;
+
+    public float progress;
+    public bool isDone;
+    private int _count;
+    private int _totalSpawns;
     
     // Start is called before the first frame update
     private void Start()
     {
-        InitializeDictionary();
+        GetTotalSpawns();
+        Timing.RunCoroutine(InitializeDictionary());
     }
 
-    private void InitializeDictionary()
+    private void GetTotalSpawns()
+    {
+        _totalSpawns = 0;
+        foreach (Pool pool in pools)
+        {
+            _totalSpawns += pool.size;
+        }
+    }
+
+    private IEnumerator<float> InitializeDictionary()
     {
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
+        _count = 0;
 
         foreach (Pool pool in pools)
         {
@@ -47,11 +71,16 @@ public class ObjectPooler : MonoBehaviour
                 GameObject obj = Instantiate(pool.prefab);
                 obj.SetActive(false);
                 objectPool.Enqueue(obj);
-                
+                progress = (float) _count / _totalSpawns;
+                _count++;
             }
 
             poolDictionary.Add(pool.tag, objectPool);
         }
+
+        yield return Timing.WaitForSeconds(0.5f);
+
+        isDone = true;
     }
 
     public GameObject SpawnFromPool(string objectTag, Vector3 position, Quaternion rotation)
@@ -97,9 +126,5 @@ public class ObjectPooler : MonoBehaviour
         }
 
     }
-
-    private void Update()
-    {
-        //print(poolDictionary["Coin"].Count);
-    }
+    
 }
