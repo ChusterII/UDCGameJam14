@@ -1,35 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-6808289271503248278
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccf1aba9553839d41ae37dd52e9ebcce, type: 3}
-  m_Name: MotionBlur
-  m_EditorClassIdentifier: 
-  active: 0
-  m_AdvancedMode: 0
-  mode:
-    m_OverrideState: 0
-    m_Value: 0
-  quality:
-    m_OverrideState: 1
-    m_Value: 0
-  intensity:
-    m_OverrideState: 1
-    m_Value: 1
-    min: 0
-    max: 1
-  clamp:
-    m_OverrideState: 1
-    m_Value: 0.0132
-    min: 0
-    max: 0.2
 --- !u!114 &-6066866775838700928
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -46,20 +16,20 @@ MonoBehaviour:
   m_AdvancedMode: 0
   threshold:
     m_OverrideState: 1
-    m_Value: 0.96
+    m_Value: 1
     min: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.44
+    m_Value: 0.81
     min: 0
   scatter:
     m_OverrideState: 1
-    m_Value: 0.79
+    m_Value: 0.463
     min: 0
     max: 1
   clamp:
     m_OverrideState: 1
-    m_Value: 65472
+    m_Value: 3.84
     min: 0
   tint:
     m_OverrideState: 1
@@ -69,7 +39,7 @@ MonoBehaviour:
     showEyeDropper: 1
   highQualityFiltering:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   dirtTexture:
     m_OverrideState: 0
     m_Value: {fileID: 2800000, guid: de57a97226b50e44c8f2bf1ea71fa74d, type: 3}
@@ -112,26 +82,26 @@ MonoBehaviour:
     m_Value: 0
   focusDistance:
     m_OverrideState: 1
-    m_Value: 15.04
+    m_Value: 16.5
     min: 0.1
   aperture:
     m_OverrideState: 1
-    m_Value: 3.8
+    m_Value: 4.3
     min: 1
     max: 32
   focalLength:
     m_OverrideState: 1
-    m_Value: 300
+    m_Value: 236
     min: 1
     max: 300
   bladeCount:
     m_OverrideState: 1
-    m_Value: 9
+    m_Value: 3
     min: 3
     max: 9
   bladeCurvature:
     m_OverrideState: 1
-    m_Value: 0.664
+    m_Value: 0.901
     min: 0
     max: 1
   bladeRotation:
@@ -154,11 +124,9 @@ MonoBehaviour:
   components:
   - {fileID: -2359478117332942019}
   - {fileID: -6066866775838700928}
-  - {fileID: 8219148564518586840}
-  - {fileID: -6808289271503248278}
-  - {fileID: 4277242042272724915}
   - {fileID: 4359950239639931205}
---- !u!114 &4277242042272724915
+  - {fileID: 857884160537466526}
+--- !u!114 &857884160537466526
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -167,21 +135,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb60a22f311433c4c962b888d1393f88, type: 3}
-  m_Name: PaniniProjection
+  m_Script: {fileID: 11500000, guid: 97c23e3b12dc18c42a140437e53d3951, type: 3}
+  m_Name: Tonemapping
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   m_AdvancedMode: 0
-  distance:
+  mode:
     m_OverrideState: 1
-    m_Value: 0.852
-    min: 0
-    max: 1
-  cropToFit:
-    m_OverrideState: 1
-    m_Value: 0
-    min: 0
-    max: 1
+    m_Value: 1
 --- !u!114 &4359950239639931205
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -218,22 +179,3 @@ MonoBehaviour:
   rounded:
     m_OverrideState: 1
     m_Value: 0
---- !u!114 &8219148564518586840
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81180773991d8724ab7f2d216912b564, type: 3}
-  m_Name: ChromaticAberration
-  m_EditorClassIdentifier: 
-  active: 0
-  m_AdvancedMode: 0
-  intensity:
-    m_OverrideState: 1
-    m_Value: 0
-    min: 0
-    max: 1
