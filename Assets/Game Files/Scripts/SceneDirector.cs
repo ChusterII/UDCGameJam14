@@ -54,9 +54,9 @@ public class SceneDirector : MonoBehaviour
         _scenesLoading.Add(SceneManager.LoadSceneAsync((int) SceneIndexes.GameScreen, LoadSceneMode.Additive));
 
        
-        Timing.RunCoroutine(GetSceneLoadProgress());
+        Timing.RunCoroutine(GetSceneLoadProgress().CancelWith(gameObject));
         
-        Timing.RunCoroutine(GetTotalProgress());
+        Timing.RunCoroutine(GetTotalProgress().CancelWith(gameObject));
     }
 
     public IEnumerator<float> GetSceneLoadProgress()

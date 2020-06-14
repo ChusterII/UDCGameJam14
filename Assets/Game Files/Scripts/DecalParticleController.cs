@@ -9,6 +9,7 @@ public class DecalParticleController : MonoBehaviour
     private List<ParticleCollisionEvent> _collisionEvents;
     private ObjectPooler _objectPooler;
     
+    
     // Start is called before the first frame update
     void Start()
     {

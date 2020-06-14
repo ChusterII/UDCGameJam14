@@ -16,6 +16,9 @@ public class Enemy : MonoBehaviour
     public float enemySpeed = 3f;
     public float attackingRange = 2f;
 
+    public AudioClip[] wakeSounds;
+    public AudioClip attackSound;
+
     // --------------------------- Private variables start here ---------------------------
     private ObjectPooler _objectPooler;
     private float _bloodPositionY;
@@ -30,6 +33,8 @@ public class Enemy : MonoBehaviour
     private bool _enableMovement = true;
     private bool _isAttacking;
     private bool _attackDisabled;
+    private AudioSource _audioSource;
+    private bool _soundPlayed;
 
 
     // Start is called before the first frame update
@@ -39,7 +44,7 @@ public class Enemy : MonoBehaviour
         InitializeForwardVector();
         InitializeRightVector();
 
-        Timing.RunCoroutine(Attack());
+        Timing.RunCoroutine(Attack().CancelWith(gameObject));
     }
 
 
@@ -93,6 +98,9 @@ public class Enemy : MonoBehaviour
                     // Player is in range, attack
                     _animator.SetTrigger("Attack");
                     
+                    // Play attack sound
+                    _audioSource.PlayOneShot(attackSound, 0.5f);
+                    
                     // Wait for animation to finish
                     yield return Timing.WaitForSeconds(0.4f);
                     
@@ -136,6 +144,13 @@ public class Enemy : MonoBehaviour
             
             // Move towards the player
             _agent.destination = target.position;
+            
+            // Play a random wake up sound
+            if (!_soundPlayed)
+            {
+                _audioSource.PlayOneShot(GetRandomAudioClip(wakeSounds));
+                _soundPlayed = true;
+            }
 
             // Get agent's velocity, which includes direction
             Vector3 velocity = _agent.velocity;
@@ -153,6 +168,10 @@ public class Enemy : MonoBehaviour
             // Set the speed if moving
             float speed = _agent.velocity.sqrMagnitude;
             _animator.SetFloat("Speed", speed);
+        }
+        else
+        {
+            _soundPlayed = false;
         }
     }
 
@@ -244,6 +263,12 @@ public class Enemy : MonoBehaviour
         return new Vector2(0,0);
     }
 
+    private AudioClip GetRandomAudioClip(AudioClip[] clips)
+    {
+        int randomIndex = Random.Range(0, clips.Length);
+        return clips[randomIndex];
+    }
+
     public void OnDeath()
     {
         // Height for the blood from the ground.
@@ -287,6 +312,7 @@ public class Enemy : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _rotation = Quaternion.Euler(0,45,0);
         _fov = GetComponent<FieldOfView>();
+        _audioSource = GetComponent<AudioSource>();
     }
     
     private void InitializeRightVector()

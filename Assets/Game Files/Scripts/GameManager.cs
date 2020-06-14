@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using MEC;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum CursorType
 {
@@ -20,7 +22,16 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+            //DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        
     }
 
     #endregion
@@ -34,6 +45,17 @@ public class GameManager : MonoBehaviour
     
     private float _playerFire;
     private PlayerController _player;
+    private UIManager _uiManager;
+    [HideInInspector]
+    public bool gameStart;
+    [HideInInspector]
+    public bool quitGame;
+    [HideInInspector]
+    public bool playedIsDead;
+    [HideInInspector]
+    public bool playerWon;
+
+    private float _gameTimer;
 
 
     // Start is called before the first frame update
@@ -41,15 +63,75 @@ public class GameManager : MonoBehaviour
     {
         SetCursor(CursorType.Normal);
         _player = FindObjectOfType<PlayerController>();
-        
-        // Play the starting sequence!
-        Timing.RunCoroutine(_player.StartingSequence());
+        _uiManager = UIManager.Instance;
+        _gameTimer = 0;
+
+        Timing.RunCoroutine(StartGame().CancelWith(gameObject));
+        Timing.RunCoroutine(PlayerWins().CancelWith(gameObject));
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        TimerTick();
+    }
+
+    private void TimerTick()
+    {
+        _gameTimer += Time.deltaTime;
+    }
+
+    private IEnumerator<float> StartGame()
+    {
+        // Turn off the other canvas
+        DisableStartingCanvas();
         
+        
+        // Start with a black fade out
+        _uiManager.ToggleTransition(true);
+        _uiManager.SetTransitionAlpha(1);
+        _uiManager.FadeOutTransition();
+        yield return Timing.WaitForSeconds(1);
+
+        // Show the main Menu;
+        _uiManager.ToggleTransition(false);
+        _uiManager.ToggleMainMenu(true);
+        _uiManager.SetMainMenuAlpha(0);
+    
+        yield return Timing.WaitForSeconds(1f);
+    
+        // Fade the main menu in
+        _uiManager.FadeInMenu();
+
+        yield return Timing.WaitForSeconds(0.9f);
+        
+        // Toggle the buttons
+        _uiManager.ToggleStartButtons(true);
+
+        // Wait while player clicks a button
+        while (!gameStart)
+        {
+            yield return Timing.WaitForOneFrame;
+        }
+
+        if (!quitGame)
+        {
+            // Play the starting sequence!
+            Timing.RunCoroutine(_player.StartingSequence().CancelWith(gameObject));
+        }
+        else
+        {
+            Application.Quit();
+        }
+    }
+
+    private void DisableStartingCanvas()
+    {
+        _uiManager.ToggleUI(false);
+        _uiManager.ToggleGameOver(false);
+        _uiManager.ToggleTransition(false);
+        _uiManager.TogglePlayerWon(false);
     }
 
     public void SetCursor(CursorType cursorType)
@@ -74,7 +156,46 @@ public class GameManager : MonoBehaviour
     {
         // Calls the death animation for the player
         _player.PlayerDeath();
+        playedIsDead = true;
+        AudioManager.Instance.DisableEnvironmentalAudio();
+        _uiManager.GameOverScreen();
     }
+
+    private IEnumerator<float> PlayerWins()
+    {
+        while (!playerWon)
+        {
+            yield return Timing.WaitForOneFrame;
+        }
+        
+        _uiManager.TogglePlayerWon(true);
+        _uiManager.FadeInPlayerWon();
+        
+        var ts = TimeSpan.FromSeconds(_gameTimer);
+        _uiManager.timeText.text = $"Your time is: {ts.TotalMinutes:00}:{ts.Seconds:00}";
+
+        yield return Timing.WaitForSeconds(1f);
+
+        bool nextStep = false;
+
+        while (!nextStep)
+        {
+            if (Input.anyKey)
+            {
+                nextStep = true;
+            }
+            yield return Timing.WaitForOneFrame;
+        }
+
+        _uiManager.ToggleTransition(true);
+        _uiManager.FadeInTransition();
+
+        yield return Timing.WaitForSeconds(1.1f);
+        
+        SceneManager.LoadScene((int)SceneIndexes.GameScreen);
+    }
+     
+    
 
     
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using MEC;
 using UnityEngine;
 
 public class LavaMover : MonoBehaviour
@@ -22,7 +23,7 @@ public class LavaMover : MonoBehaviour
     private Color _emissionColor1;
     private Color _emissionColor2;
     private bool _isGlowing;
-    private Sequence _glow;
+    //private 
     
     // Start is called before the first frame update
     void Start()
@@ -32,14 +33,16 @@ public class LavaMover : MonoBehaviour
         _emissionColor1 = _originalColor * intensityMin;
         _emissionColor2 = _originalColor * intensityMax;
         DOTween.Init();
-        DOTween.defaultAutoKill = false;
+
+
+        Timing.RunCoroutine(LavaGlow().CancelWith(gameObject));
     }
 
     // Update is called once per frame
     void Update()
     {
         ScrollLava();
-        LavaGlow();
+        
     }
 
     private void ScrollLava()
@@ -49,25 +52,18 @@ public class LavaMover : MonoBehaviour
         _lavaMaterial.mainTextureOffset = new Vector2(offsetX, offsetY);
     }
 
-    private void LavaGlow()
+    private IEnumerator<float> LavaGlow()
     {
-        if (!_isGlowing)
+        while (true)
         {
-            _isGlowing = true;
-            _glow = DOTween.Sequence();
+            Sequence glow = DOTween.Sequence();
 
-            _glow.Append(_lavaMaterial.DOColor(_emissionColor1, glowTime));
-            _glow.Append(_lavaMaterial.DOColor(_emissionColor2, glowTime));
+            glow.Append(_lavaMaterial.DOColor(_emissionColor1, glowTime));
+            glow.Append(_lavaMaterial.DOColor(_emissionColor2, glowTime));
 
-            _glow.Play();
+            glow.Play();
+
+            yield return Timing.WaitForSeconds(glowTime * 2);
         }
-        else
-        {
-            if (_glow.IsComplete())
-            {
-                _isGlowing = false;
-            }
-        }
-        
     }
 }

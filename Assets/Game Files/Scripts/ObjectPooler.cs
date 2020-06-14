@@ -47,7 +47,7 @@ public class ObjectPooler : MonoBehaviour
     private void Start()
     {
         GetTotalSpawns();
-        Timing.RunCoroutine(InitializeDictionary());
+        Timing.RunCoroutine(InitializeDictionary().CancelWith(gameObject));
     }
 
     private void GetTotalSpawns()

@@ -47,6 +47,7 @@ public class IsoController : MonoBehaviour
     private Quaternion _rotation;
     private GameObject _fireball;
     private TextMeshPro _floatingText;
+    private AudioSource _audioSource;
     
 
 
@@ -58,7 +59,7 @@ public class IsoController : MonoBehaviour
       InitializeRightVector();
       InitializeParticles();
 
-      Timing.RunCoroutine(_FireballController());
+      Timing.RunCoroutine(_FireballController().CancelWith(gameObject));
     }
 
     // Update is called once per frame
@@ -218,8 +219,8 @@ public class IsoController : MonoBehaviour
                 // Get the Nav Mesh layer of where the player clicked
                 int clickedNavMeshLayer = CheckClickedNavMeshLayer(_mousePosition);
                 
-                // Calculations for fireball cost. It's a sum because the cost is always negative
-                float remainingFire = _playerController.playerCurrentFire + _playerController.fireballCost;
+                // Calculations for fireball cost. 
+                float remainingFire = _playerController.playerCurrentFire - 1;
 
                 // Don't let the player teleport to another mesh (or to somewhere weird like Australia) nor let him cast if out of power
                 if (_currentNavMeshLayer == clickedNavMeshLayer && clickedNavMeshLayer != -1 && remainingFire >= 0)
@@ -236,17 +237,20 @@ public class IsoController : MonoBehaviour
                     // Wait one frame
                     yield return Timing.WaitForOneFrame;
 
-                    //Play the animation
+                    // Play the animation
                     _animator.SetTrigger("Casting Fireball");
 
                     // Raise the teleporting flag!
                     _isTeleporting = true;
                     
                     // Substract fire power from the player
-                    _playerController.SetFireValue(_playerController.fireballCost);
+                    _playerController.SetFireValue(-1);
 
                     // Initial particle effects
                     SpawnInitialNova();
+                    
+                    // Play the casting sound
+                    _audioSource.PlayOneShot(_playerController.castingSound, 0.7f);
                     
                     // Wait for initial animations to play
                     yield return Timing.WaitForSeconds(0.4f);
@@ -259,6 +263,9 @@ public class IsoController : MonoBehaviour
                     
                     // Move the fireball towards the clicked point, this is done in Update
                     _moveFireball = true;
+                    
+                    // Play Fireball sound
+                    _audioSource.PlayOneShot(_playerController.fireballMovingSound, 0.5f);
                     
                     // Wait for the fireball to finish it's movement
                     while (_continueCoroutine == false)
@@ -289,6 +296,9 @@ public class IsoController : MonoBehaviour
                     
                     // Play the ending explosion
                     SpawnMediumExplosion();
+                    
+                    // Play the explosion sound
+                    _audioSource.PlayOneShot(_playerController.explosionSound, 0.8f);
 
                     // Reenable movement
                     EnablePlayerMovement(true);
@@ -384,6 +394,7 @@ public class IsoController : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody>();
         _rotation = Quaternion.Euler(0,45,0);
         _floatingText = floatingTextObject.GetComponent<TextMeshPro>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     private void InitializeParticles()
