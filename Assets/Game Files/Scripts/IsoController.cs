@@ -250,7 +250,7 @@ public class IsoController : MonoBehaviour
                     SpawnInitialNova();
                     
                     // Play the casting sound
-                    _audioSource.PlayOneShot(_playerController.castingSound, 0.7f);
+                    _audioSource.PlayOneShot(_playerController.castingSound, 0.3f);
                     
                     // Wait for initial animations to play
                     yield return Timing.WaitForSeconds(0.4f);
@@ -265,7 +265,7 @@ public class IsoController : MonoBehaviour
                     _moveFireball = true;
                     
                     // Play Fireball sound
-                    _audioSource.PlayOneShot(_playerController.fireballMovingSound, 0.5f);
+                    _audioSource.PlayOneShot(_playerController.fireballMovingSound, 0.3f);
                     
                     // Wait for the fireball to finish it's movement
                     while (_continueCoroutine == false)
@@ -298,7 +298,7 @@ public class IsoController : MonoBehaviour
                     SpawnMediumExplosion();
                     
                     // Play the explosion sound
-                    _audioSource.PlayOneShot(_playerController.explosionSound, 0.8f);
+                    _audioSource.PlayOneShot(_playerController.explosionSound, 0.4f);
 
                     // Reenable movement
                     EnablePlayerMovement(true);

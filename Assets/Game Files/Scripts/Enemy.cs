@@ -99,7 +99,7 @@ public class Enemy : MonoBehaviour
                     _animator.SetTrigger("Attack");
                     
                     // Play attack sound
-                    _audioSource.PlayOneShot(attackSound, 0.5f);
+                    _audioSource.PlayOneShot(attackSound, 0.25f);
                     
                     // Wait for animation to finish
                     yield return Timing.WaitForSeconds(0.4f);
