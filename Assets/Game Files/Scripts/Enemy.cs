@@ -12,8 +12,7 @@ public class Enemy : MonoBehaviour
 {
 
     public Material[] bloodSplatsMaterials;
-    public float enemyHeight = 0.25f;
-    public float enemySpeed = 3f;
+    
     public float attackingRange = 2f;
 
     public AudioClip[] wakeSounds;
